@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import StarButton from "./star.vue";
-	import { CSSProperties } from "vue";
+	import { computed, CSSProperties } from "vue";
 	type Props = {
 		style?: CSSProperties | CSSProperties[];
 		id: number;
@@ -8,7 +8,10 @@
 		des: string;
 		price: string;
 	};
-	defineProps<Props>();
+	const props = defineProps<Props>();
+	const priceArr = computed(() => {
+		return props.price.split(".");
+	});
 </script>
 
 <template>
@@ -26,7 +29,16 @@
 				<el-text class="text" truncated>{{ des }}</el-text>
 			</el-col>
 			<el-divider style="margin: 10px 0" />
-			<el-col :span="20">
+			<el-col :span="20" style="display: flex; align-items: center">
+				<div>
+					<el-text class="secondary_text" size="default">￥</el-text>
+					<el-text class="primary_text">{{ priceArr[0] }}</el-text>
+					<span>.</span>
+					<el-text class="secondary_text" size="small">
+						{{ priceArr[1] }}
+					</el-text>
+				</div>
+				<div style="flex: 1" />
 				<StarButton :active="false" />
 			</el-col>
 		</el-row>
@@ -48,5 +60,13 @@
 	.image {
 		width: 100%;
 		display: block;
+	}
+	.primary_text{
+		color: red;
+		font-weight: bolder;
+		font-size: larger;
+	}
+	.secondary_text{
+		color: gray;
 	}
 </style>
